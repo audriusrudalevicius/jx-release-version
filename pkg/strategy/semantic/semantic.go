@@ -35,7 +35,9 @@ func (s Strategy) BumpVersion(previous semver.Version) (*semver.Version, error) 
 		}
 	}
 
-	repo, err := git.PlainOpen(dir)
+	repo, err := git.PlainOpenWithOptions(dir, &git.PlainOpenOptions{
+		DetectDotGit: true,
+	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to open git repository at %q: %w", dir, err)
 	}
