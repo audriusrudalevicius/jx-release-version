@@ -33,7 +33,7 @@ func (options Tag) TagRemote() error {
 		return errors.New("no version to use for tag")
 	}
 
-	repo, err := git.PlainOpen(options.Dir)
+	repo, err := git.PlainOpenWithOptions(options.Dir, &git.PlainOpenOptions{DetectDotGit: true})
 	if err != nil {
 		return fmt.Errorf("failed to open git repository at %q: %w", options.Dir, err)
 	}
