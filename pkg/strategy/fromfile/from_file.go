@@ -122,4 +122,5 @@ var fileVersionReaders = []FileVersionReader{
 	MavenPOMVersionReader{},
 	JsPackageVersionReader{},
 	GradleVersionReader{},
+	AssemblyVersionReader{},
 }
