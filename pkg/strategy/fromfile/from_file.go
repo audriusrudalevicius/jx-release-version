@@ -3,12 +3,13 @@ package fromfile
 import (
 	"errors"
 	"fmt"
-	"os"
-	"path/filepath"
-	"strings"
-
 	"github.com/Masterminds/semver/v3"
 	"github.com/jenkins-x/jx-logging/v3/pkg/log"
+	"io/ioutil"
+	"os"
+	"path"
+	"path/filepath"
+	"regexp"
 )
 
 var (
@@ -76,13 +77,24 @@ func (s Strategy) BumpVersion(_ semver.Version) (*semver.Version, error) {
 }
 
 func (s Strategy) autoDetect(dir string) (FileVersionReader, []string, error) {
+	files, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return nil, nil, fmt.Errorf("could not list files, in directory %s", dir)
+	}
+
 	for _, reader := range fileVersionReaders {
 		var filePaths []string
-		for _, fileName := range reader.SupportedFiles() {
-			filePath := filepath.Join(dir, fileName)
-			if _, err := os.Stat(filePath); err == nil {
-				log.Logger().Debugf("Adding file %s as a candidate to read version using %s reader", filePath, reader.String())
-				filePaths = append(filePaths, filePath)
+		for _, fileNamePattern := range reader.SupportedFiles() {
+			var fileNameExpr = regexp.MustCompile(fileNamePattern)
+			for _, file := range files {
+				if file.IsDir() {
+					continue
+				}
+				filePath := filepath.Join(dir, file.Name())
+				if fileNameExpr.FindString(file.Name()) != "" {
+					log.Logger().Debugf("Adding file %s as a candidate to read version using %s reader", filePath, reader.String())
+					filePaths = append(filePaths, filePath)
+				}
 			}
 		}
 		if len(filePaths) > 0 {
@@ -95,8 +107,9 @@ func (s Strategy) autoDetect(dir string) (FileVersionReader, []string, error) {
 
 func (s Strategy) getReader() (FileVersionReader, error) {
 	for _, reader := range fileVersionReaders {
-		for _, fileName := range reader.SupportedFiles() {
-			if strings.HasSuffix(s.FilePath, fileName) {
+		for _, filePattern := range reader.SupportedFiles() {
+			var pattenMatcher = regexp.MustCompile(filePattern)
+			if pattenMatcher.FindString(path.Base(s.FilePath)) != "" {
 				return reader, nil
 			}
 		}
@@ -123,4 +136,5 @@ var fileVersionReaders = []FileVersionReader{
 	JsPackageVersionReader{},
 	GradleVersionReader{},
 	AssemblyVersionReader{},
+	CsharpProjectVersionReader{},
 }

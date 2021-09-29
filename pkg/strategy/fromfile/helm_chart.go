@@ -15,7 +15,7 @@ func (r HelmChartVersionReader) String() string {
 
 func (r HelmChartVersionReader) SupportedFiles() []string {
 	return []string{
-		"Chart.yaml",
+		"^Chart\\.yaml",
 	}
 }
 

@@ -18,7 +18,7 @@ func (r MavenPOMVersionReader) String() string {
 
 func (r MavenPOMVersionReader) SupportedFiles() []string {
 	return []string{
-		"pom.xml",
+		"^pom\\.xml",
 	}
 }
 

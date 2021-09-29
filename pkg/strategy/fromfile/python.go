@@ -23,7 +23,7 @@ func (r PythonVersionReader) String() string {
 
 func (r PythonVersionReader) SupportedFiles() []string {
 	return []string{
-		"setup.py",
+		"^setup\\.py",
 	}
 }
 

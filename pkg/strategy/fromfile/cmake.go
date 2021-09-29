@@ -20,7 +20,7 @@ func (r CMakeVersionReader) String() string {
 
 func (r CMakeVersionReader) SupportedFiles() []string {
 	return []string{
-		"CMakeLists.txt",
+		"^CMakeLists\\.txt",
 	}
 }
 

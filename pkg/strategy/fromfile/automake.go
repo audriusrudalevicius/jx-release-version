@@ -20,7 +20,7 @@ func (r AutomakeVersionReader) String() string {
 
 func (r AutomakeVersionReader) SupportedFiles() []string {
 	return []string{
-		"configure.ac",
+		"^configure\\.ac",
 	}
 }
 

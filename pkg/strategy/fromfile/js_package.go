@@ -14,7 +14,7 @@ func (r JsPackageVersionReader) String() string {
 
 func (r JsPackageVersionReader) SupportedFiles() []string {
 	return []string{
-		"package.json",
+		"^package\\.json",
 	}
 }
 

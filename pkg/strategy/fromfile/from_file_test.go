@@ -121,6 +121,22 @@ func TestReadVersion(t *testing.T) {
 			expected: semver.MustParse("1.2.8"),
 		},
 		{
+			name: "CSharp (project)",
+			strategy: Strategy{
+				Dir:      "testdata",
+				FilePath: "csharp.csproj",
+			},
+			expected: semver.MustParse("2016.7.0"),
+		},
+		{
+			name: "CSharp (global assembly)",
+			strategy: Strategy{
+				Dir:      "testdata",
+				FilePath: "GlobalAssemblyInfo.cs",
+			},
+			expected: semver.MustParse("2016.7.0"),
+		},
+		{
 			name: "unknown file",
 			strategy: Strategy{
 				Dir:      "testdata",
@@ -170,6 +186,14 @@ func TestAutoDetect(t *testing.T) {
 			expectedFilePaths: []string{
 				"testdata/gradle/build.gradle",
 				"testdata/gradle/gradle.properties",
+			},
+		},
+		{
+			name:           "csharp project pattern",
+			dir:            "testdata/csharp",
+			expectedReader: CsharpProjectVersionReader{},
+			expectedFilePaths: []string{
+				"testdata/csharp/project1.csproj",
 			},
 		},
 		{

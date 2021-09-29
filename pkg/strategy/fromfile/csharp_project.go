@@ -9,32 +9,30 @@ import (
 )
 
 var (
-	// globalAssemblyVersionRegexp is used to find the argument `AssemblyVersion("2016.7.00.00")`
-	globalAssemblyVersionRegexp = regexp.MustCompile(`AssemblyVersion\("(\d*|\.)*"\)`)
-	// VersionRegexp is used to find the version `2016.7.00.00`
-	VersionRegexp = regexp.MustCompile(`([0-9]+|\.+)+`)
+	// globalAssemblyVersionRegexp is used to find the argument `<AssemblyVersion>2016.7.00</AssemblyVersion>`
+	csharpProjectVersionRegexp = regexp.MustCompile(`AssemblyVersion>(\d*|\.)*`)
 )
 
-type AssemblyVersionReader struct {
+type CsharpProjectVersionReader struct {
 }
 
-func (r AssemblyVersionReader) String() string {
-	return "csharp"
+func (r CsharpProjectVersionReader) String() string {
+	return "csharp-project"
 }
 
-func (r AssemblyVersionReader) SupportedFiles() []string {
+func (r CsharpProjectVersionReader) SupportedFiles() []string {
 	return []string{
-		"^GlobalAssemblyInfo\\.cs",
+		"\\.csproj$",
 	}
 }
 
-func (r AssemblyVersionReader) ReadFileVersion(filePath string) (string, error) {
+func (r CsharpProjectVersionReader) ReadFileVersion(filePath string) (string, error) {
 	content, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		return "", err
 	}
 
-	assemblyVersionLine := globalAssemblyVersionRegexp.Find(content)
+	assemblyVersionLine := csharpProjectVersionRegexp.Find(content)
 	if len(assemblyVersionLine) == 0 {
 		return "", fmt.Errorf("AssemblyVersion not found in file %s", filePath)
 	}

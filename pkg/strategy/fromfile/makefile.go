@@ -15,7 +15,7 @@ func (r MakefileVersionReader) String() string {
 
 func (r MakefileVersionReader) SupportedFiles() []string {
 	return []string{
-		"Makefile",
+		"^Makefile$",
 	}
 }
 
