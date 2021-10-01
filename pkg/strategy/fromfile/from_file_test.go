@@ -23,7 +23,7 @@ func TestReadVersion(t *testing.T) {
 			strategy: Strategy{
 				Dir: "testdata",
 			},
-			expected: semver.MustParse("1.2.3"),
+			expected: semver.MustParse("1.3.69"),
 		},
 		{
 			name: "auto detect gradle",
@@ -176,8 +176,8 @@ func TestAutoDetect(t *testing.T) {
 		{
 			name:              "testdata",
 			dir:               "testdata",
-			expectedReader:    HelmChartVersionReader{},
-			expectedFilePaths: []string{"testdata/Chart.yaml"},
+			expectedReader:    VersionFileReader{},
+			expectedFilePaths: []string{"testdata/VERSION"},
 		},
 		{
 			name:           "multiple matches",

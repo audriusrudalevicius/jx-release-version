@@ -127,6 +127,7 @@ type FileVersionReader interface {
 // fileVersionReaders is an ordered list of all readers to try
 // when auto-detecting the file to use
 var fileVersionReaders = []FileVersionReader{
+	VersionFileReader{},
 	HelmChartVersionReader{},
 	MakefileVersionReader{},
 	AutomakeVersionReader{},
